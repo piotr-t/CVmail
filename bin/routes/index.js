@@ -21,6 +21,15 @@ const createTransporter = async () => {
   
 }
 
+const genMessageEmail = (mailAdress, mailText) =>{
+
+  return `<div>
+  <h1>Otrzymałeś wiadonosć od ${mailAdress}</h1>
+  <p>${mailText}</p>
+  </div>`
+
+}
+
 let transporter = createTransporter();
 
 router.post('/message', function(req, res, next) {
@@ -32,8 +41,8 @@ router.post('/message', function(req, res, next) {
         to: process.env.EMAIL, // list of receivers
         subject: `${req.body.textareaName}?`, // Subject line
         text: `${req.body.textareaName}?`, // plain text body
-        html: `<b>${req.body.textareaName}</b>`, // html body
-      },(v)=>{/* console.log(v,'v'); */});
+        html: genMessageEmail(req.body.emailName, req.body.textareaName) // html body
+      },(v)=>{});
     })
     res.send({message:'wiadomość została wysłana'});
 });
@@ -41,11 +50,6 @@ router.post('/message', function(req, res, next) {
 router.get('/message',(req, res)=>{
   res.send('https://piotrt.ct8.pl/CV')
 })
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
 
 module.exports = router;
